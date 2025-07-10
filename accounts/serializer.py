@@ -3,12 +3,9 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 
-
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User  # ← دي لازم تكون الكلاس نفسه، مش حقل منه
+        model = User
         fields = (
             "username",
             "email",
@@ -18,8 +15,10 @@ class UserSerializer(serializers.ModelSerializer):
             "is_staff",
         )
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = Profile
         fields = (
@@ -30,4 +29,3 @@ class ProfileSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         )
-        

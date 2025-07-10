@@ -45,7 +45,7 @@ class Product(models.Model):
 
     def created_by_username(self):
         return self.created_by.username if self.created_by else "Unknown"
-    
+
     def __str__(self):
         return self.name if self.name else "Unnamed Product"
 
@@ -78,25 +78,31 @@ class Customer(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name="order")
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT,
+                                 related_name="order")
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,
+                                       default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def update_total_price(self):
-        total_sum_result = self.items.aggregate(calculated_total=Sum(F('price') * F('quantity')))
+        total_sum_result = self.items.aggregate(
+            calculated_total=Sum(F('price') * F('quantity')))
         total_sum = total_sum_result.get('calculated_total', 0.00)
         self.total_amount = total_sum if total_sum is not None else 0.00
         self.save(update_fields=['total_amount'])
+
     def __str__(self):
-        return f"Order {self.id} - {self.customer.name if self.customer else 'No Customer'}"
+        return f"""Order
+    {self.id} - {self.customer.name if self.customer else 'No Customer'}"""
 
 
 class OrderItem(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="order_items"
     )
-    order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey("Order", on_delete=models.CASCADE,
+                              related_name="items")
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -109,9 +115,9 @@ class OrderItem(models.Model):
 
     class Meta:
         ordering = ["-id"]
+
     def __str__(self):
         return self.product.name
-    
 
 
 @receiver(post_save, sender=OrderItem)

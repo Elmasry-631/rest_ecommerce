@@ -50,7 +50,7 @@ class OrderItemListView(viewsets.ModelViewSet):
     serializer_class = OrderItemSerializer
 
 
-class OrderGeniricListCreateView(generics.ListCreateAPIView):
+class OrderGenericListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     authentication_classes = [BasicAuthentication]
