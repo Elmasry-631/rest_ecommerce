@@ -17,4 +17,7 @@ urlpatterns = [
     # path('products/create/', ProductCreateView.as_view(), name='product-create'),
     # path('products/<slug:slug>/update/', ProductUpdateView.as_view(), name='product-update'),
     # path('products/<slug:slug>/delete/', ProductDeleteView.as_view(), name='product-delete'),
+    
+    path('generics/', OrderGeniricListCreateView.as_view()),
+    path('api-auth', include('rest_framework.urls'))
 ]
